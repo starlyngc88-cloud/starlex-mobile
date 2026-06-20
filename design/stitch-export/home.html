@@ -1,0 +1,192 @@
+<!DOCTYPE html><html class="light" lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>STARLEX - Dashboard Jurídico</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary-fixed": "#231b00",
+                "primary-fixed": "#dde1ff",
+                "primary-container": "#0051ff",
+                "on-surface": "#1b1b1d",
+                "on-primary": "#ffffff",
+                "on-error": "#ffffff",
+                "secondary-fixed": "#e3e2e7",
+                "on-primary-container": "#dee2ff",
+                "on-secondary-fixed-variant": "#46464b",
+                "primary": "#003dc7",
+                "on-surface-variant": "#434656",
+                "on-primary-fixed-variant": "#0038b7",
+                "tertiary-fixed-dim": "#ecc300",
+                "surface-container-low": "#f6f3f5",
+                "on-error-container": "#93000a",
+                "error": "#ba1a1a",
+                "error-container": "#ffdad6",
+                "secondary-container": "#e0dfe4",
+                "on-tertiary-fixed-variant": "#554500",
+                "surface-container": "#f0edef",
+                "surface-container-lowest": "#ffffff",
+                "surface": "#fcf8fb",
+                "outline": "#737688",
+                "on-primary-fixed": "#001452",
+                "surface-variant": "#e4e2e4",
+                "secondary-fixed-dim": "#c6c6cb",
+                "on-secondary-fixed": "#1a1b1f",
+                "surface-tint": "#004bee",
+                "background": "#fcf8fb",
+                "tertiary-fixed": "#ffe17b",
+                "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "surface-container-highest": "#e4e2e4",
+                "surface-container-high": "#eae7ea",
+                "on-secondary-container": "#626267",
+                "inverse-primary": "#b7c4ff",
+                "surface-bright": "#fcf8fb",
+                "secondary": "#5d5e63",
+                "tertiary": "#715c00",
+                "surface-dim": "#dcd9dc",
+                "primary-fixed-dim": "#b7c4ff",
+                "tertiary-container": "#cca800",
+                "inverse-surface": "#303032",
+                "inverse-on-surface": "#f3f0f2",
+                "on-background": "#1b1b1d",
+                "outline-variant": "#c3c5d9"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "unit": "4px",
+                "container-margin": "20px",
+                "stack-md": "16px",
+                "section-gap": "32px",
+                "stack-sm": "8px",
+                "gutter": "16px"
+            },
+            "fontFamily": {
+                "headline-sm": ["Inter"],
+                "caption": ["Inter"],
+                "display-md": ["Inter"],
+                "display-lg": ["Inter"],
+                "body-md": ["Inter"],
+                "headline-sm-mobile": ["Inter"],
+                "label-caps": ["Inter"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "headline-sm": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "caption": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                "display-md": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "display-lg": ["34px", {"lineHeight": "41px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["15px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-sm-mobile": ["20px", {"lineHeight": "25px", "fontWeight": "600"}],
+                "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "body-lg": ["17px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fcf8fb; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid #E5E5EA;
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.04);
+        }
+        .national-thread {
+            background: linear-gradient(90deg, #FFCD00 50%, #003087 25%, #C8102E 25%);
+            background-size: 100% 100%;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-x-hidden pb-24" data-mode="connect">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-margin py-unit h-14 bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30"><div class="absolute top-0 left-0 w-full h-[2px] national-thread"></div><div class="flex-1"></div><div class="flex items-center justify-center"><div class="flex items-center gap-3"></div></div><div class="flex-1 flex justify-end items-center"><button class="relative p-2 hover:bg-surface-container-high/50 rounded-full transition-colors"><img alt="User Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8cibzmt0FFK18YSRaWQVM0shKdSMr3pc0wo-LEz3uZggid8arHlU1cyScoMt9OO1Db4sxin9eqwdQ5qZnB2cl-VnkGvwvlxjRaHzEXUq8-X_ZmyElc8GOxpHnvqU8wi8ZkauKJQZvOVtK2U8UL-eWM1RDWIGWbshrbdHihGPe49cdkzR4QdXSzunigurj_6fD36lKRY7yzMkOcFHaowy9SfEM-hP-DWb-QiMwlOK5mzTIcUpHRaGXKsOM5f1KX60FDiQiXj0MB7Vx"></button></div></header>
+<main class="px-container-margin max-w-5xl mx-auto mt-20 space-y-8">
+<!-- Hero Section -->
+<section class="text-center space-y-unit py-6 animate-in fade-in duration-700"><div class="flex flex-col items-center gap-4"><img alt="Starlex Logo" class="w-24 h-24 rounded-full shadow-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCTz8-oeoVHGD3jQat2Kf0ibFxhCp-pz93fMIpP4GnDinF_FCwVwQvqKvPGYnCdFrof4AYYjtuo6vpJWLwvQatUUXc6FSQZH70MIrUBs989w6KHyzdnX0hej9g9BEuC_h2tLu9jz2unXmkO4C7la1pHTJfI152My7byUz8ggv44R6eXdtZ6WeedrRs4HqvV90TUjoB1VpV0MzcxiKAo_01_nR7boSBnx6sU0i8uo-BlOj3D9q7tObAMVrfz-3GdF-F-yK2kj7BWMZuL-M"><h1 class="relative font-extralight text-[24px] tracking-[0.3em] uppercase text-primary">
+  STARLEX
+  <span class="absolute -bottom-1 left-0 w-full h-[2px] flex">
+<span class="flex-1 bg-[#FFCD00]"></span>
+<span class="flex-1 bg-[#003087]"></span>
+<span class="flex-1 bg-[#C8102E]"></span>
+</span>
+</h1></div><h2 class="font-display-md text-display-md text-on-surface">Hola, Dr. Alejandro</h2></section>
+<!-- Quick Summary Cards (Asymmetric Grid) -->
+<section class="flex flex-col items-center max-w-md mx-auto gap-4"><div class="text-center space-y-1"><span class="font-label-caps text-[10px] text-secondary tracking-wider uppercase">Próxima</span><h3 class="font-headline-sm text-body-lg">10:00 AM — Juzgado 14</h3><p class="font-caption text-[12px] text-on-surface-variant">Rad. 2023-00452 • Rivera</p></div><div class="h-[1px] w-12 bg-outline-variant/50"></div><div class="text-center"><p class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Pendiente</p><span class="text-[24px] font-bold text-on-surface">$12.5M</span></div><div class="w-full space-y-3">
+<div class="flex justify-between items-center px-1">
+<span class="font-label-caps text-label-caps text-error font-bold tracking-wider uppercase">2 ALERTAS CRÍTICAS</span>
+</div>
+<div class="flex gap-4">
+<div class="w-full flex-shrink-0 bg-error-container/20 border border-error/10 rounded-xl flex items-center justify-between gap-3 p-3"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-error text-[18px]">priority_high</span><div class="flex flex-col"><p class="font-body-md text-caption text-on-error-container leading-tight">Recurso Apelación #8831</p><span class="font-caption text-[11px] text-error font-bold">48h restantes</span></div></div><button class="text-error font-label-caps text-[11px] font-bold">Ver</button></div>
+</div>
+</div></section>
+<!-- Main Action Grid -->
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-container-margin pb-safe pt-2 h-20 bg-surface/70 backdrop-blur-xl border-t border-outline-variant/30 rounded-t-xl shadow-sm">
+<a class="flex flex-col items-center justify-center text-secondary font-medium active:scale-90 transition-transform duration-150 hover:text-primary-container" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-caps text-label-caps">Calendario</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-medium active:scale-90 transition-transform duration-150 hover:text-primary-container" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="groups">groups</span>
+<span class="font-label-caps text-label-caps">Clientes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-medium active:scale-90 transition-transform duration-150 hover:text-primary-container" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="payments">payments</span>
+<span class="font-label-caps text-label-caps">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-medium active:scale-90 transition-transform duration-150 hover:text-primary-container" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps">Ajustes</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions and subtle scroll effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('shadow-sm');
+                } else {
+                    header.classList.remove('shadow-sm');
+                }
+            });
+
+            // Ripple-like effect on action cards
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mousedown', () => {
+                    card.style.transform = 'scale(0.98)';
+                });
+                card.addEventListener('mouseup', () => {
+                    card.style.transform = 'scale(1)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+
+
+</body></html>
