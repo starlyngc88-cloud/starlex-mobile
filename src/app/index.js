@@ -1,43 +1,49 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AlertTriangle, ChevronRight } from 'lucide-react-native';
+import { AlertTriangle, ChevronRight, Calendar, Users, DollarSign, Settings } from 'lucide-react-native'; // 👈 Importados todos los iconos del sistema para evitar errores
+import { useRouter } from 'expo-router';
 
 export default function Home() {
+  const router = useRouter();
+  
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
 
-      {/* SECCIÓN SUPERIOR: ENCABEZADO CON PERFIL FLOTANTE */}
+      {/* HEADER SUPERIOR FIJO: Nunca baja y se alinea perfectamente a la derecha */}
       <View style={styles.headerContainer}>
-        {/* Foto de perfil cliqueable en la esquina superior derecha */}
         <TouchableOpacity 
           style={styles.profileHeaderButton}
           onPress={() => console.log('Ir al perfil del usuario')}
         >
           <Image 
-            source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150' }} // Imagen ejemplo del Dr.
+            source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150' }} 
             style={styles.profileHeaderImage} 
           />
         </TouchableOpacity>
-
-        {/* Logo Central de la Justicia */}
-        <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=200' }} 
-          style={styles.avatarLogo} 
-        />
-        <Text style={styles.logoText}>STARLEX</Text>
-        
-        {/* LÍNEA TRICOLOR (Amarillo, Azul y Rojo) */}
-        <View style={styles.tricolorContainer}>
-          <View style={[styles.colorLine, { backgroundColor: '#f1c40f' }]} />
-          <View style={[styles.colorLine, { backgroundColor: '#003dc7' }]} />
-          <View style={[styles.colorLine, { backgroundColor: '#c0392b' }]} />
-        </View>
       </View>
 
-      {/* SECCIÓN CENTRAL: CONTENIDO PRINCIPAL */}
-      <View style={styles.mainContent}>
+      {/* CONTENEDOR CENTRAL: Todo el contenido agrupado de forma compacta */}
+      <View style={styles.centerColumnContent}>
+        
+        {/* LOGO CENTRALIZADO Y GRANDE (Tus proporciones intactas) */}
+        <Image 
+          source={require('../assets/logo_starlex.png')} 
+          style={styles.avatarLogo} 
+        />
+
+        {/* NOMBRE DE LA MARCA E INSTITUCIONAL */}
+        <View style={styles.brandContainer}>
+          <Text style={styles.logoText}>STARLEX</Text>
+          <View style={styles.tricolorContainer}>
+            <View style={[styles.colorLine, { backgroundColor: '#f1c40f' }]} />
+            <View style={[styles.colorLine, { backgroundColor: '#003dc7' }]} />
+            <View style={[styles.colorLine, { backgroundColor: '#c0392b' }]} />
+          </View>
+        </View>
+
+        {/* SALUDO DE BIENVENIDA */}
         <Text style={styles.welcomeText}>Hola, Dr. Alejandro</Text>
 
         {/* PRÓXIMA CITA */}
@@ -54,13 +60,10 @@ export default function Home() {
           <Text style={styles.sectionLabel}>PENDIENTE</Text>
           <Text style={styles.moneyInfo}>$12.5M</Text>
         </View>
-      </View>
 
-      {/* SECCIÓN INFERIOR: ALERTAS CRÍTICAS */}
-      <View style={styles.bottomContent}>
+        {/* ALERTAS CRÍTICAS */}
         <View style={styles.alertsContainer}>
           <Text style={styles.alertsTitle}>2 ALERTAS CRÍTICAS</Text>
-          
           <View style={styles.alertCard}>
             <View style={styles.alertLeft}>
               <AlertTriangle color="#a81c1c" size={22} style={styles.alertIcon} />
@@ -69,12 +72,16 @@ export default function Home() {
                 <Text style={styles.alertSubText}>48h restantes</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.verButton}>
+            <TouchableOpacity 
+              style={styles.verButton}
+              onPress={() => router.push('/alerts')}
+            >
               <Text style={styles.verButtonText}>Ver</Text>
               <ChevronRight color="#a81c1c" size={14} />
             </TouchableOpacity>
           </View>
         </View>
+
       </View>
     </SafeAreaView>
   );
@@ -84,64 +91,70 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    justifyContent: 'space-between',
     paddingHorizontal: 24,
   },
   headerContainer: {
-    alignItems: 'center',
-    marginTop: 15,
     width: '100%',
-    position: 'relative',
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingTop: 5,
   },
   profileHeaderButton: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    zIndex: 10,
+    height: 42,
+    width: 42,
   },
   profileHeaderImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     borderWidth: 1,
     borderColor: '#e2e8f0',
   },
+  centerColumnContent: {
+    flex: 1,
+    alignItems: 'center',       
+    justifyContent: 'center',    
+    width: '100%',
+    marginTop: -30,
+  },
   avatarLogo: {
-    width: 85,
-    height: 85,
-    borderRadius: 42.5,
+    width: 350,                 // 👈 Restaurado exactamente a como te gusta
+    height: 220,            
+    resizeMode: 'contain',  
+    marginBottom: 5,
+  },
+  brandContainer: {
+    alignItems: 'center',
     marginBottom: 10,
   },
   logoText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '300',
     letterSpacing: 6,
     color: '#1a2b4c',
   },
   tricolorContainer: {
     flexDirection: 'row',
-    width: 120,
+    width: 150,
     height: 3,
-    marginTop: 8,
+    marginTop: 4,
   },
   colorLine: {
-    flex: 1, // Divide de forma exactamente proporcional los 3 colores
+    flex: 1,
     height: '100%',
   },
-  mainContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
   welcomeText: {
-    fontSize: 26,
+    fontSize: 25,
     fontWeight: '700',
     color: '#111111',
-    marginBottom: 20,
+    marginBottom: 16,
+    textAlign: 'center',
   },
   sectionSection: {
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: 2,
     width: '100%',
   },
   sectionLabel: {
@@ -149,42 +162,38 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#5d5e63',
     letterSpacing: 2,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   mainInfo: {
     fontSize: 19,
     fontWeight: '700',
     color: '#111111',
-    marginBottom: 2,
   },
   subInfo: {
     fontSize: 13,
     color: '#71717a',
   },
   divider: {
-    width: '30%',
+    width: '25%',
     height: 1,
     backgroundColor: 'rgba(195, 197, 217, 0.3)',
-    marginVertical: 10,
+    marginVertical: 6,
   },
   moneyInfo: {
     fontSize: 34,
     fontWeight: '700',
     color: '#111111',
   },
-  bottomContent: {
-    width: '100%',
-    marginBottom: 25,
-  },
   alertsContainer: {
     width: '100%',
+    marginTop: 18,
   },
   alertsTitle: {
     fontSize: 11,
     fontWeight: '700',
     color: '#a81c1c',
     letterSpacing: 1.5,
-    marginBottom: 10,
+    marginBottom: 6,
   },
   alertCard: {
     flexDirection: 'row',
@@ -195,7 +204,6 @@ const styles = StyleSheet.create({
     padding: 14,
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
   },
   alertLeft: {
     flexDirection: 'row',
