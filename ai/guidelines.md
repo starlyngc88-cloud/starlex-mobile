@@ -34,3 +34,9 @@ Design System obligatorio:
 
 \- Prohibido hardcodear estilos
 
+
+Colores:
+- Todos los colores deben venir de /app/theme/colors.ts
+- Prohibido usar hex directos en componentes
+- Los estados legales deben usar colores semánt
+
