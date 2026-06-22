@@ -1,0 +1,215 @@
+# 🧠 AI USAGE - STARLEX
+
+Este documento define cómo interactuar con la IA para desarrollar la aplicación de forma consistente, escalable y profesional.
+
+---
+
+# 🎯 REGLA BASE (SIEMPRE)
+
+Antes de cualquier petición, usar:
+
+Usa context + architecture
+
+Añadir según necesidad:
+
+- UI → + ux_ui + theme
+- React Native → + mobile_react_native
+- lógica de negocio → + product
+- base de datos → + supabase
+
+---
+
+# 📱 CREAR PANTALLA
+
+Usa context + architecture + ux_ui + mobile_react_native + theme
+
+Crear pantalla de [nombre de la pantalla]
+
+Requisitos:
+- UI limpia
+- Usar services
+- NO lógica en components
+
+OBLIGATORIO:
+- Usar Layout global (Header + BottomTabs)
+- No crear headers propios
+- No duplicar navegación
+- Solo implementar contenido interno
+
+ESTILO:
+- Usar colors, spacing y typography (Design System)
+- No hardcodear estilos
+- Seguir estándar definido en ux_ui.md
+
+---
+
+# 🧩 CREAR COMPONENTES
+
+Usa context + ux_ui + mobile_react_native + theme
+
+Crea componente reutilizable [nombre]
+para usar en [pantalla]
+
+Requisitos:
+- Reutilizable
+- Sin lógica de negocio
+- Estilizado con theme
+
+Ejemplo:
+Crea componente CaseCard para lista de procesados
+
+---
+
+# 🔌 CREAR SERVICIO
+
+Crear servicio para [entidad]
+
+Requisitos:
+- Desacoplado de UI
+- Manejar errores
+- Tipado claro
+- Reutilizable
+
+Ejemplo:
+Crear servicio para procesados
+
+---
+
+# 🧱 CREAR DESIGN SYSTEM (solo una vez)
+
+Usa context + architecture
+
+Crear Design System
+
+Debe generar:
+/app/theme
+- colors.ts
+- spacing.ts
+- typography.ts
+
+Reglas:
+- No hardcodear estilos
+- Todo debe salir del theme
+
+---
+
+# 📊 BASE DE DATOS (Supabase)
+
+Usa context + architecture + supabase
+
+Diseña modelo de datos para [módulo]
+
+Ejemplo:
+Diseña modelo de datos para procesados y audiencias
+
+---
+
+# 📂 FEATURE COMPLETA (modo avanzado)
+
+Usa context + architecture + ux_ui + product
+
+Implementa la funcionalidad completa de [feature]
+
+Incluir:
+- Pantalla
+- Componentes
+- Servicios
+- Modelo de datos
+
+Ejemplo:
+Implementa la funcionalidad de agenda de audiencias
+
+---
+
+# 🧭 NAVEGACIÓN
+
+Usa architecture + mobile_react_native
+
+Configura navegación para:
+- [pantallas]
+
+Ejemplo:
+Configura navegación para Procesados, Calendario y Finanzas
+
+---
+
+# 🎨 MEJORAR UI
+
+Usa ux_ui + theme
+
+Mejora la UI de la pantalla [nombre]
+
+---
+
+# 🗄️ STORAGE (archivos)
+
+Usa architecture + supabase
+
+Implementa subida de archivos para [módulo]
+
+---
+
+# 🧠 REFACTORIZAR
+
+Usa architecture + guidelines
+
+Refactoriza este código para mejorar:
+- escalabilidad
+- separación de capas
+
+---
+
+# 🧪 DEBUG / ERRORES
+
+Usa architecture
+
+Analiza este error y dame una solución profesional
+
+---
+
+# 📄 DOCUMENTACIÓN
+
+Usa context + product
+
+Actualizar README
+
+Objetivo:
+- Explicar qué hace la app
+- Añadir nuevas funcionalidades
+- Mantener texto claro y corto
+
+---
+
+# 🔥 CREAR TODO DE UNA (modo completo)
+
+Usa context + architecture + ux_ui + product
+
+Crea la funcionalidad completa de [nombre]
+
+Incluyendo:
+- UI
+- Componentes
+- Servicios
+- Estructura
+
+---
+
+# ⚡ REGLAS DE ORO
+
+- Siempre usar context + architecture
+- Nunca hardcodear estilos
+- Respetar Layout global
+- Usar Design System (colors, spacing, typography)
+- No duplicar lógica ni UI
+- Mantener código limpio y modular
+
+---
+
+# 🚀 RESULTADO
+
+Aplicando estas instrucciones:
+- Código consistente
+- UI uniforme
+- Arquitectura limpia
+- Menor uso de tokens
+- Desarrollo más rápido
