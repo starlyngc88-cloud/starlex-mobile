@@ -1,14 +1,8 @@
 \# UI STANDARD - STARLEX
 
-
-
 Todas las pantallas deben seguir esta estructura obligatoria:
 
-
-
 \## Layout Base
-
-
 
 1\. HEADER FIJO
 
@@ -17,8 +11,6 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 \- Nombre app: "STARLEX"
 
 \- Avatar de usuario (lado derecho), este desplegara un menu con mas opciones adicionales a los botton navigation
-
-
 
 2\. TÍTULO DE PANTALLA
 
@@ -30,8 +22,6 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 
 \- Debe estar en el Header
 
-
-
 3\. CONTENIDO
 
 \- Sección dinámica
@@ -39,8 +29,6 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 \- Evitar Scroll
 
 \- Componentes reutilizables
-
-
 
 4\. BOTTOM NAVIGATION
 
@@ -56,11 +44,7 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 
 &#x20; - Ajustes
 
-
-
 \## Estilo visual
-
-
 
 \- Diseño limpio y profesional
 
@@ -72,8 +56,6 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 
 &#x20; - Rojo → Juicio
 
-
-
 \- Tarjetas:
 
 &#x20; - Bordes redondeados
@@ -82,11 +64,7 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 
 &#x20; - Información clara y compacta
 
-
-
 \## Reglas obligatorias
-
-
 
 \- No crear headers diferentes
 
@@ -94,7 +72,19 @@ Todas las pantallas deben seguir esta estructura obligatoria:
 
 \- No duplicar navegación
 
+## Colores por estado legal
+
+La aplicación usa colores semánticos para representar el estado de un proceso:
+
+- INDAGACIÓN → amarillo (colors.indagacion)
+- IMPUTADO → azul (colors.imputado)
+- JUICIO → rojo (colors.juicio)
+
+Reglas:
+- Siempre usar colores del theme
+- Nunca hardcodear colores
+- Usar colores para bordes, indicadores y etiquetas
+
 \- Toda pantalla usa el mismo layout base
 
 \- Toda pantalla usa el mismo logo
-
