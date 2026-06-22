@@ -98,6 +98,32 @@ Requisitos:
 
 \- Reutilizable
 
+## Actualizar README
+
+Usa context + architecture + product
+
+Actualiza el archivo README.md en la raíz del proyecto.
+
+Objetivo:
+Mantener una descripción clara y actualizada de la aplicación.
+
+Reglas:
+- Explicar qué hace la app en pocas palabras
+- Incluir nuevas funcionalidades añadidas recientemente
+- Mantener texto breve, claro y profesional
+- No eliminar información existente importante
+- Optimizar para que sea fácil de leer (bullets o secciones cortas)
+
+Contenido mínimo:
+- Descripción de la app
+- Módulos principales
+- Últimas funcionalidades añadidas
+
+Formato:
+- Markdown limpio
+- Evitar textos largos
+- Enfocado en desarrolladores y producto
+
 \- No acoplado a la UI
 
 
