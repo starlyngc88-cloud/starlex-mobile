@@ -1,0 +1,9 @@
+nuevo-evento.js — Nuevo Evento
+================================
+- Formulario para crear audiencias judiciales o reuniones generales
+- Selector de tipo: Audiencia judicial / Reunión general
+- Selector modal de procesado con búsqueda (solo audiencia judicial)
+- Campos: título, fecha, hora, juzgado, radicado, descripción
+- Validación de campos obligatorios
+- Guarda vía audienciasService.createAudiencia()
+- Ruta oculta en tabs (href: null), navegación con router.back()

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.7",
+    "dotenv": "^17.4.2",
     "expo": "~54.0.0",
     "expo-constants": "~18.0.13",
     "expo-linking": "~8.0.12",
@@ -21,5 +23,23 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
-  "private": true
+  "private": true,
+  "description": "Si quieres dejar tu proyecto 100% sano, limpio y con las versiones perfectas que exige Expo",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/starlyngc88-cloud/starlex-mobile.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/starlyngc88-cloud/starlex-mobile/issues"
+  },
+  "homepage": "https://github.com/starlyngc88-cloud/starlex-mobile#readme",
+  "devDependencies": {
+    "@types/react": "~19.1.10",
+    "typescript": "~5.9.2"
+  }
 }

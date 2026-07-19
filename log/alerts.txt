@@ -1,0 +1,4 @@
+alerts.js — Pantalla Alertas
+=============================
+- Pendiente de implementar
+- Ruta oculta en tabs (href: null), accesible desde Home

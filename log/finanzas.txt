@@ -1,0 +1,4 @@
+finanzas.js — Pantalla Finanzas
+=================================
+- Pendiente de implementar
+- Ruta configurada en tabs con icono DollarSign

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { colors, spacing, typography, borderRadius as br } from '../theme';
 
 export default function Home() {
   return (
@@ -15,10 +16,39 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', padding: 20, backgroundColor: '#ffffff' },
-  logo: { width: 220, height: 220, resizeMode: 'contain', marginBottom: 20 },
-  title: { fontSize: 24, color: '#111', fontWeight: '700', marginBottom: 8, textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#666', marginBottom: 20, textAlign: 'center' },
-  button: { backgroundColor: '#007AFF', paddingVertical: 12, paddingHorizontal: 28, borderRadius: 10 },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 }
+  container: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
+    backgroundColor: colors.background,
+  },
+  logo: {
+    width: 220,
+    height: 220,
+    resizeMode: 'contain',
+    marginBottom: spacing.lg,
+  },
+  title: {
+    ...typography.h2,
+    color: colors.text.primary,
+    marginBottom: spacing.md,
+    textAlign: 'center',
+  },
+  subtitle: {
+    ...typography.body,
+    color: colors.text.secondary,
+    marginBottom: spacing.lg,
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderRadius: br.medium,
+  },
+  buttonText: {
+    ...typography.bodyBold,
+    color: colors.text.inverse,
+  },
 });

@@ -1,88 +1,85 @@
-# 🧠 AI USAGE - STARLEX
+# AI USAGE - STARLEX
 
 Este documento define cómo interactuar con la IA para desarrollar la aplicación de forma consistente, escalable y profesional.
 
 ---
 
-# 🎯 REGLA BASE (SIEMPRE)
+# REGLA BASE (SIEMPRE)
 
 Antes de cualquier petición, usar:
-
 Usa context + architecture
 
 Añadir según necesidad:
-
-- UI → + ux_ui + theme
+- UI + estilos → + ux_ui + theme
 - React Native → + mobile_react_native
 - lógica de negocio → + product
 - base de datos → + supabase
 
 ---
 
-# 📱 CREAR PANTALLA
+# CREAR PANTALLA
 
 Usa context + architecture + ux_ui + mobile_react_native + theme
 
-Crear pantalla de [nombre de la pantalla]
+Crear pantalla de [nombre]
 
 Requisitos:
 - UI limpia
-- Usar services
+- Usar services (NO fetch/axios directo)
 - NO lógica en components
+- SafeAreaView + StatusBar dark-content + fondo colors.background
+- Contenido centrado (alignItems center, justifyContent center)
+- Branding: logo + STARLEX + línea tricolor
+- Tarjetas con borderRadius.large, shadows.light, border colors.border
+- Imports estándar desde '../theme'
 
 OBLIGATORIO:
-- Usar Layout global (Header + BottomTabs)
+- Usar Layout global (tabs o root)
 - No crear headers propios
 - No duplicar navegación
 - Solo implementar contenido interno
 
 ESTILO:
-- Usar colors, spacing y typography (Design System)
+- Usar colors, spacing y typography
 - No hardcodear estilos
-- Seguir estándar definido en ux_ui.md
+- Seguir ux_ui.md
+
+LOG:
+- Crear/actualizar log/ con el mismo nombre de la pantalla
 
 ---
 
-# 🧩 CREAR COMPONENTES
+# CREAR COMPONENTES
 
 Usa context + ux_ui + mobile_react_native + theme
 
-Crea componente reutilizable [nombre]
-para usar en [pantalla]
+Crea componente reutilizable [nombre] para usar en [pantalla]
 
 Requisitos:
 - Reutilizable
 - Sin lógica de negocio
 - Estilizado con theme
 
-Ejemplo:
-Crea componente CaseCard para lista de procesados
-
 ---
 
-# 🔌 CREAR SERVICIO
+# CREAR SERVICIO
 
 Crear servicio para [entidad]
 
 Requisitos:
 - Desacoplado de UI
-- Manejar errores
+- Manejar errores (try/catch + ApiResponse)
 - Tipado claro
-- Reutilizable
-
-Ejemplo:
-Crear servicio para procesados
+- Singleton exportado
+- Seguir patrón de procesados.service.ts
 
 ---
 
-# 🧱 CREAR DESIGN SYSTEM (solo una vez)
+# CREAR DESIGN SYSTEM (solo una vez)
 
 Usa context + architecture
 
-Crear Design System
-
-Debe generar:
-/app/theme
+Crear Design System en /app/theme:
 - colors.ts
 - spacing.ts
 - typography.ts
@@ -93,18 +90,84 @@ Reglas:
 
 ---
 
-# 📊 BASE DE DATOS (Supabase)
+# AUTENTICACION
 
 Usa context + architecture + supabase
 
-Diseña modelo de datos para [módulo]
+Implementar autenticación con Supabase Auth
 
-Ejemplo:
-Diseña modelo de datos para procesados y audiencias
+Flujo:
+- LoginScreen (app/components/LoginScreen.tsx) renderizado por root _layout.js
+- useAuth hook en app/hooks/useAuth.ts
+- auth.service.ts con signIn, signUp, signOut, getSession, getProfile, onAuthStateChange
+- Al registrarse: crear perfil en legal.usuarios (auth_id, email, nombre, apellido)
+- Root layout (_layout.js) controla auth: no sesion → LoginScreen, con sesion → Tabs
+- Punto de estado BD verde/rojo en esquina superior izquierda
+
+Schema: legal (no public)
+- PostgREST: exponer schema legal en Settings > API
+- Permisos solo para authenticated (no anon)
+- RLS en todas las tablas
 
 ---
 
-# 📂 FEATURE COMPLETA (modo avanzado)
+# BASE DE DATOS (Supabase)
+
+Usa context + architecture + supabase
+
+Diseña modelo de datos para [módulo] en schema legal
+
+Todas las tablas deben tener:
+- RLS habilitado
+- user_id UUID REFERENCES auth.users(id)
+- Políticas: cada usuario solo ve sus propios registros
+- created_at / updated_at con trigger
+
+Esquema actual:
+- legal.usuarios (perfiles de usuario)
+- legal.procesados (clientes)
+- legal.audiencias
+- legal.finanzas
+
+---
+
+# NAVEGACION
+
+Usa architecture + mobile_react_native
+
+Layout raíz en src/app/_layout.js:
+- SafeAreaProvider
+- Auth check (useAuth)
+- No autenticado → LoginScreen
+- Autenticado → Tabs (Home, Calendario, Clientes, Finanzas, Ajustes)
+- Ruta oculta: alerts
+
+---
+
+# CONEXION BD
+
+Usa hooks/useDbStatus.ts
+- Verifica cada 30s vía supabase.auth.getSession()
+- Punto verde (conectado), amarillo (lento), rojo (desconectado)
+- Renderizado en _layout.js para todas las pantallas
+
+---
+
+# LOGS POR PANTALLA
+
+Por cada pantalla creada o modificada:
+Crear/actualizar archivo en log/ con el mismo nombre
+Formato .txt liviano:
+```
+nombre — Titulo
+====================
+- accion 1
+- accion 2
+```
+
+---
+
+# FEATURE COMPLETA (modo avanzado)
 
 Usa context + architecture + ux_ui + product
 
@@ -115,51 +178,19 @@ Incluir:
 - Componentes
 - Servicios
 - Modelo de datos
-
-Ejemplo:
-Implementa la funcionalidad de agenda de audiencias
+- Log
 
 ---
 
-# 🧭 NAVEGACIÓN
-
-Usa architecture + mobile_react_native
-
-Configura navegación para:
-- [pantallas]
-
-Ejemplo:
-Configura navegación para Procesados, Calendario y Finanzas
-
----
-
-# 🎨 MEJORAR UI
-
-Usa ux_ui + theme
-
-Mejora la UI de la pantalla [nombre]
-
----
-
-# 🗄️ STORAGE (archivos)
-
-Usa architecture + supabase
-
-Implementa subida de archivos para [módulo]
-
----
-
-# 🧠 REFACTORIZAR
+# REFACTORIZAR
 
 Usa architecture + guidelines
 
-Refactoriza este código para mejorar:
-- escalabilidad
-- separación de capas
+Refactoriza este código para mejorar escalabilidad y separación de capas
 
 ---
 
-# 🧪 DEBUG / ERRORES
+# DEBUG / ERRORES
 
 Usa architecture
 
@@ -167,49 +198,28 @@ Analiza este error y dame una solución profesional
 
 ---
 
-# 📄 DOCUMENTACIÓN
+# DOCUMENTACION
 
 Usa context + product
 
-Actualizar README
-
-Objetivo:
-- Explicar qué hace la app
-- Añadir nuevas funcionalidades
-- Mantener texto claro y corto
+Actualizar README describiendo nuevas funcionalidades
 
 ---
 
-# 🔥 CREAR TODO DE UNA (modo completo)
-
-Usa context + architecture + ux_ui + product
-
-Crea la funcionalidad completa de [nombre]
-
-Incluyendo:
-- UI
-- Componentes
-- Servicios
-- Estructura
-
----
-
-# ⚡ REGLAS DE ORO
+# REGLAS DE ORO
 
 - Siempre usar context + architecture
 - Nunca hardcodear estilos
+- Fondo siempre colors.background (blanco)
+- Usar SafeAreaView + StatusBar
+- Branding: logo + STARLEX + tricolor
+- Contenido centrado
+- Tarjetas con sombra y borde
 - Respetar Layout global
 - Usar Design System (colors, spacing, typography)
+- NO fetch/axios directo → siempre services
+- Manejar errores siempre
 - No duplicar lógica ni UI
-- Mantener código limpio y modular
-
----
-
-# 🚀 RESULTADO
-
-Aplicando estas instrucciones:
-- Código consistente
-- UI uniforme
-- Arquitectura limpia
-- Menor uso de tokens
-- Desarrollo más rápido
+- Schema: legal (no public)
+- Solo authenticated puede leer/escribir datos
+- Cada pantalla tiene su log en /log

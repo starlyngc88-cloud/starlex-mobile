@@ -1,0 +1,8 @@
+LoginScreen.tsx — Pantalla de Inicio de Sesión
+===============================================
+- Login y registro con Supabase Auth
+- Campos: email, password (+ nombre/apellido en registro)
+- Branding Starlex (logo + tricolor)
+- Fondo blanco, tarjeta con borde y sombra
+- Al registrarse crea perfil en legal.usuarios
+- Navegación automática al layout principal al autenticarse

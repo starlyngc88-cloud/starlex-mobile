@@ -1,0 +1,9 @@
+nuevo-procesado.js — Pantalla Nuevo Procesado
+=============================================
+- Formulario para crear nuevo procesado
+- Campos: nombre, apellido, cédula, email, teléfono, estado legal, fecha inicio, observaciones
+- Selector de estado legal: Indagación, Imputado, Juicio, Sentencia
+- Validaciones: nombre, apellido y cédula obligatorios
+- Al guardar llama a procesadosService.createProcesado() (incluye user_id automático)
+- Ruta oculta en layout (href: null), accesible desde FAB de procesados
+- Tras guardar hace router.back() y la lista se refresca por useFocusEffect

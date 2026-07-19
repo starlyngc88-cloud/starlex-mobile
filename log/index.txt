@@ -1,0 +1,9 @@
+index.js — Pantalla Home
+========================
+- Pantalla principal con branding Starlex (logo + STARLEX texto)
+- TricolorLine en layout global (ya no en Home)
+- Avatar en header con menú desplegable → cerrar sesión
+- Muestra próxima audiencia y monto pendiente
+- Alertas críticas con tarjeta roja
+- Fondo blanco, tarjetas con sombra
+- Saludo dinámico: "Hola, Dr. {nombre}" desde legal.usuarios

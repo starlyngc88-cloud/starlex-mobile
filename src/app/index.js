@@ -1,88 +1,165 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar, ActivityIndicator, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AlertTriangle, ChevronRight, Calendar, Users, DollarSign, Settings } from 'lucide-react-native'; // 👈 Importados todos los iconos del sistema para evitar errores
+import { AlertTriangle, ChevronRight, LogOut } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { colors, spacing, typography, shadows, borderRadius as br } from '../theme';
+import { audienciasService, finanzasService, authService } from '../../app/services';
+import { useAuth } from '../../app/hooks/useAuth';
+
+function formatCurrency(amount) {
+  return '$' + (amount / 1000000).toFixed(1).replace('.0', '') + 'M';
+}
+
+function getNextHearing(audiencias) {
+  if (audiencias.length === 0) return null;
+  return audiencias.sort((a, b) => new Date(a.fecha + 'T' + a.hora).getTime() - new Date(b.fecha + 'T' + b.hora).getTime())[0];
+}
 
 export default function Home() {
   const router = useRouter();
-  
+  const { signOut, session } = useAuth();
+  const [nextHearing, setNextHearing] = useState(null);
+  const [pendingAmount, setPendingAmount] = useState(0);
+  const [alertCount, setAlertCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const loadData = async () => {
+      const [audienciasRes, finanzasRes] = await Promise.all([
+        audienciasService.getAudienciasPendientes(),
+        finanzasService.getAllFinanzas(),
+      ]);
+
+      if (audienciasRes.success) {
+        setNextHearing(getNextHearing(audienciasRes.data));
+      }
+      if (finanzasRes.success) {
+        const pending = finanzasRes.data
+          .filter((f) => f.estado === 'pendiente')
+          .reduce((sum, f) => sum + f.monto, 0);
+        setPendingAmount(pending);
+      }
+      setAlertCount(audienciasRes.success ? audienciasRes.data.length : 0);
+
+      if (session?.user?.id) {
+        const profileRes = await authService.getProfile(session.user.id);
+        if (profileRes.success && profileRes.data) {
+          setUserName(profileRes.data.nombre);
+        } else if (session?.user?.email) {
+          setUserName(session.user.email.split('@')[0]);
+        }
+      }
+
+      setLoading(false);
+    };
+    loadData();
+  }, [session]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
-      {/* HEADER SUPERIOR FIJO: Nunca baja y se alinea perfectamente a la derecha */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.profileHeaderButton}
-          onPress={() => console.log('Ir al perfil del usuario')}
+          onPress={() => setMenuVisible(true)}
         >
-          <Image 
-            source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150' }} 
-            style={styles.profileHeaderImage} 
+          <Image
+            source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150' }}
+            style={styles.profileHeaderImage}
           />
         </TouchableOpacity>
       </View>
 
-      {/* CONTENEDOR CENTRAL: Todo el contenido agrupado de forma compacta */}
       <View style={styles.centerColumnContent}>
-        
-        {/* LOGO CENTRALIZADO Y GRANDE (Tus proporciones intactas) */}
-        <Image 
-          source={require('../assets/logo_starlex.png')} 
-          style={styles.avatarLogo} 
+        <Image
+          source={require('../assets/logo_starlex.png')}
+          style={styles.avatarLogo}
         />
 
-        {/* NOMBRE DE LA MARCA E INSTITUCIONAL */}
         <View style={styles.brandContainer}>
           <Text style={styles.logoText}>STARLEX</Text>
-          <View style={styles.tricolorContainer}>
-            <View style={[styles.colorLine, { backgroundColor: '#f1c40f' }]} />
-            <View style={[styles.colorLine, { backgroundColor: '#003dc7' }]} />
-            <View style={[styles.colorLine, { backgroundColor: '#c0392b' }]} />
-          </View>
         </View>
 
-        {/* SALUDO DE BIENVENIDA */}
-        <Text style={styles.welcomeText}>Hola, Dr. Alejandro</Text>
+        <Text style={styles.welcomeText}>Hola, Dr. {userName || '...'}</Text>
 
-        {/* PRÓXIMA CITA */}
-        <View style={styles.sectionSection}>
-          <Text style={styles.sectionLabel}>PRÓXIMA</Text>
-          <Text style={styles.mainInfo}>10:00 AM — Juzgado 14</Text>
-          <Text style={styles.subInfo}>Rad. 2023-00452 • Rivera</Text>
-        </View>
-
-        <View style={styles.divider} />
-
-        {/* PENDIENTE FINANCIERO */}
-        <View style={styles.sectionSection}>
-          <Text style={styles.sectionLabel}>PENDIENTE</Text>
-          <Text style={styles.moneyInfo}>$12.5M</Text>
-        </View>
-
-        {/* ALERTAS CRÍTICAS */}
-        <View style={styles.alertsContainer}>
-          <Text style={styles.alertsTitle}>2 ALERTAS CRÍTICAS</Text>
-          <View style={styles.alertCard}>
-            <View style={styles.alertLeft}>
-              <AlertTriangle color="#a81c1c" size={22} style={styles.alertIcon} />
-              <View>
-                <Text style={styles.alertMainText}>Recurso Apelación #8831</Text>
-                <Text style={styles.alertSubText}>48h restantes</Text>
-              </View>
+        {loading ? (
+          <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.lg }} />
+        ) : (
+          <>
+            <View style={styles.sectionSection}>
+              <Text style={styles.sectionLabel}>PRÓXIMA</Text>
+              {nextHearing ? (
+                <>
+                  <Text style={styles.mainInfo}>{nextHearing.hora} — {nextHearing.juzgado}</Text>
+                  <Text style={styles.subInfo}>Rad. {nextHearing.radicado}</Text>
+                </>
+              ) : (
+                <Text style={styles.subInfo}>Sin audiencias pendientes</Text>
+              )}
             </View>
-            <TouchableOpacity 
-              style={styles.verButton}
-              onPress={() => router.push('/alerts')}
+
+            <View style={styles.divider} />
+
+            <View style={styles.sectionSection}>
+              <Text style={styles.sectionLabel}>PENDIENTE</Text>
+              <Text style={styles.moneyInfo}>
+                {pendingAmount > 0 ? formatCurrency(pendingAmount) : '$0'}
+              </Text>
+            </View>
+
+            {alertCount > 0 && (
+              <View style={styles.alertsContainer}>
+                <Text style={styles.alertsTitle}>{alertCount} {alertCount === 1 ? 'ALERTA CRÍTICA' : 'ALERTAS CRÍTICAS'}</Text>
+                <View style={styles.alertCard}>
+                  <View style={styles.alertLeft}>
+                    <AlertTriangle color={colors.critical} size={22} style={styles.alertIcon} />
+                    <View>
+                      <Text style={styles.alertMainText}>{alertCount} audiencia{alertCount !== 1 ? 's' : ''} pendiente{alertCount !== 1 ? 's' : ''}</Text>
+                      <Text style={styles.alertSubText}>Revisa el calendario</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.verButton}
+                    onPress={() => router.push('/alerts')}
+                  >
+                    <Text style={styles.verButtonText}>Ver</Text>
+                    <ChevronRight color={colors.critical} size={14} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </>
+        )}
+      </View>
+      <Modal
+        visible={menuVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.menuOverlay}
+          activeOpacity={1}
+          onPress={() => setMenuVisible(false)}
+        >
+          <View style={styles.menuContainer}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={async () => {
+                setMenuVisible(false);
+                await signOut();
+              }}
             >
-              <Text style={styles.verButtonText}>Ver</Text>
-              <ChevronRight color="#a81c1c" size={14} />
+              <LogOut color={colors.error} size={18} />
+              <Text style={styles.menuItemText}>Cerrar sesión</Text>
             </TouchableOpacity>
           </View>
-        </View>
-
-      </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -90,8 +167,8 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 24,
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing.lg,
   },
   headerContainer: {
     width: '100%',
@@ -99,7 +176,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingTop: 5,
+    paddingTop: spacing.xs,
   },
   profileHeaderButton: {
     height: 42,
@@ -110,7 +187,7 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 21,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.border,
   },
   centerColumnContent: {
     flex: 1,
@@ -120,88 +197,73 @@ const styles = StyleSheet.create({
     marginTop: -30,
   },
   avatarLogo: {
-    width: 350,                 // 👈 Restaurado exactamente a como te gusta
-    height: 220,            
-    resizeMode: 'contain',  
-    marginBottom: 5,
+    width: 350,
+    height: 220,
+    resizeMode: 'contain',
+    marginBottom: spacing.sm,
   },
   brandContainer: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: spacing.md,
   },
   logoText: {
-    fontSize: 22,
-    fontWeight: '300',
+    ...typography.h2,
     letterSpacing: 6,
     color: '#1a2b4c',
   },
-  tricolorContainer: {
-    flexDirection: 'row',
-    width: 150,
-    height: 3,
-    marginTop: 4,
-  },
-  colorLine: {
-    flex: 1,
-    height: '100%',
-  },
   welcomeText: {
-    fontSize: 25,
-    fontWeight: '700',
-    color: '#111111',
-    marginBottom: 16,
+    ...typography.h1,
+    color: colors.text.primary,
+    marginBottom: spacing.md,
     textAlign: 'center',
   },
   sectionSection: {
     alignItems: 'center',
-    marginVertical: 2,
+    marginVertical: spacing.xs,
     width: '100%',
   },
   sectionLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#5d5e63',
+    ...typography.label,
+    color: colors.secondary,
     letterSpacing: 2,
-    marginBottom: 2,
+    marginBottom: spacing.xs,
   },
   mainInfo: {
-    fontSize: 19,
-    fontWeight: '700',
-    color: '#111111',
+    ...typography.h3,
+    color: colors.text.primary,
   },
   subInfo: {
-    fontSize: 13,
-    color: '#71717a',
+    ...typography.body,
+    color: colors.secondary,
   },
   divider: {
     width: '25%',
     height: 1,
     backgroundColor: 'rgba(195, 197, 217, 0.3)',
-    marginVertical: 6,
+    marginVertical: spacing.md,
   },
   moneyInfo: {
     fontSize: 34,
     fontWeight: '700',
-    color: '#111111',
+    color: colors.text.primary,
   },
   alertsContainer: {
     width: '100%',
-    marginTop: 18,
+    marginTop: spacing.lg,
   },
   alertsTitle: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#a81c1c',
+    ...typography.label,
+    color: colors.critical,
     letterSpacing: 1.5,
-    marginBottom: 6,
+    marginBottom: spacing.md,
   },
   alertCard: {
     flexDirection: 'row',
     backgroundColor: '#fff5f5',
     borderWidth: 1,
     borderColor: '#ffe3e3',
-    borderRadius: 14,
-    padding: 14,
+    borderRadius: br.large,
+    padding: spacing.md,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -211,33 +273,57 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   alertIcon: {
-    marginRight: 10,
+    marginRight: spacing.md,
   },
   alertMainText: {
-    fontSize: 14,
-    fontWeight: '600',
+    ...typography.captionBold,
     color: '#2d1515',
   },
   alertSubText: {
-    fontSize: 12,
-    color: '#a81c1c',
-    fontWeight: '500',
-    marginTop: 1,
+    ...typography.small,
+    color: colors.critical,
+    marginTop: spacing.xs,
   },
   verButton: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 18,
+    backgroundColor: colors.background,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+    borderRadius: br.round,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ffe3e3',
   },
   verButtonText: {
-    color: '#a81c1c',
-    fontSize: 13,
-    fontWeight: '600',
-    marginRight: 2,
+    ...typography.captionBold,
+    color: colors.critical,
+    marginRight: spacing.xs,
+  },
+  menuOverlay: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
+  menuContainer: {
+    marginTop: 80,
+    marginRight: spacing.lg,
+    backgroundColor: colors.background,
+    borderRadius: br.medium,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadows.medium,
+    minWidth: 180,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.sm + 2,
+    paddingHorizontal: spacing.md,
+  },
+  menuItemText: {
+    ...typography.body,
+    color: colors.error,
+    marginLeft: spacing.sm,
   },
 });

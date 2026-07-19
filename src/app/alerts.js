@@ -1,39 +1,56 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AlertTriangle, ChevronRight, Bell } from 'lucide-react-native';
+import { colors, spacing, typography, shadows, borderRadius as br } from '../theme';
+import { audienciasService } from '../../app/services';
 
 export default function AlertsScreen() {
-  // Simulación de datos de alertas críticas de Starlex
-  const alertsList = [
-    { id: 1, title: 'Recurso Apelación #8831', time: '48h restantes', detail: 'Juzgado 14 Civil • Rad. 2023-00452' },
-    { id: 2, title: 'Término de Traslado Vence', time: '3 días restantes', detail: 'Tribunal Superior • Rad. 2022-01990' },
-    { id: 3, title: 'Audiencia de Pruebas', time: 'Próximo Lunes', detail: 'Juzgado 05 Penal • Rad. 2024-00112' },
-  ];
+  const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      const res = await audienciasService.getAudienciasPendientes();
+      if (res.success) {
+        const mapped = res.data.map((a) => ({
+          id: a.id,
+          title: a.titulo,
+          time: `${a.fecha} — ${a.hora}`,
+          detail: `${a.juzgado} • Rad. ${a.radicado}`,
+        }));
+        setAlerts(mapped);
+      }
+      setLoading(false);
+    };
+    load();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       
-      {/* HEADER DE LA PANTALLA */}
       <View style={styles.headerContainer}>
         <View style={styles.headerTitleRow}>
-          <Bell color="#a81c1c" size={24} style={styles.bellIcon} />
+          <Bell color={colors.critical} size={24} style={styles.bellIcon} />
           <Text style={styles.headerTitle}>Alertas del Sistema</Text>
         </View>
         <Text style={styles.headerSubtitle}>Revisa los términos judiciales críticos</Text>
       </View>
 
-      {/* LISTADO DE ALERTAS */}
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <Text style={styles.sectionTitle}>{alertsList.length} ACCIONES REQUERIDAS</Text>
+        <Text style={styles.sectionTitle}>{alerts.length} {alerts.length === 1 ? 'ACCIÓN REQUERIDA' : 'ACCIONES REQUERIDAS'}</Text>
         
-        {alertsList.map((alert) => (
+        {loading ? (
+          <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.xl }} />
+        ) : alerts.length === 0 ? (
+          <Text style={styles.emptyText}>No hay alertas pendientes</Text>
+        ) : alerts.map((alert) => (
           <View key={alert.id} style={styles.alertCard}>
             <View style={styles.alertIndicator} />
             <View style={styles.alertContent}>
               <View style={styles.alertTextRow}>
-                <AlertTriangle color="#a81c1c" size={18} style={styles.iconMargin} />
+                <AlertTriangle color={colors.critical} size={18} style={styles.iconMargin} />
                 <Text style={styles.alertMainText}>{alert.title}</Text>
               </View>
               <Text style={styles.alertTimeText}>{alert.time}</Text>
@@ -41,7 +58,7 @@ export default function AlertsScreen() {
             </View>
             <TouchableOpacity style={styles.verButton}>
               <Text style={styles.verButtonText}>Gestionar</Text>
-              <ChevronRight color="#a81c1c" size={14} />
+              <ChevronRight color={colors.critical} size={14} />
             </TouchableOpacity>
           </View>
         ))}
@@ -53,67 +70,65 @@ export default function AlertsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 24,
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing.lg,
   },
   headerContainer: {
-    marginTop: 20,
-    marginBottom: 25,
+    marginTop: spacing.md,
+    marginBottom: spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
-    paddingBottom: 15,
+    borderBottomColor: colors.surface,
+    paddingBottom: spacing.md,
   },
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   bellIcon: {
-    marginRight: 10,
+    marginRight: spacing.sm,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1a2b4c',
+    ...typography.h2,
+    color: colors.text.primary,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#71717a',
-    marginTop: 4,
+    ...typography.caption,
+    color: colors.secondary,
+    marginTop: spacing.xs,
   },
   scrollContainer: {
-    paddingBottom: 40,
+    paddingBottom: spacing.xl,
   },
   sectionTitle: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#a81c1c',
+    ...typography.label,
+    color: colors.critical,
     letterSpacing: 1.5,
-    marginBottom: 15,
+    marginBottom: spacing.md,
   },
   alertCard: {
     flexDirection: 'row',
     backgroundColor: '#fff5f5',
     borderWidth: 1,
     borderColor: '#ffe3e3',
-    borderRadius: 14,
-    marginBottom: 14,
+    borderRadius: br.large,
+    marginBottom: spacing.md,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingRight: 14,
+    paddingRight: spacing.md,
     overflow: 'hidden',
   },
   alertIndicator: {
     width: 5,
     height: '100%',
-    backgroundColor: '#a81c1c',
+    backgroundColor: colors.critical,
     position: 'absolute',
     left: 0,
   },
   alertContent: {
     flex: 1,
-    paddingVertical: 14,
-    paddingLeft: 18,
-    paddingRight: 8,
+    paddingVertical: spacing.md,
+    paddingLeft: spacing.lg,
+    paddingRight: spacing.sm,
   },
   alertTextRow: {
     flexDirection: 'row',
@@ -121,44 +136,45 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   iconMargin: {
-    marginRight: 6,
+    marginRight: spacing.xs,
   },
   alertMainText: {
-    fontSize: 15,
-    fontWeight: '600',
+    ...typography.captionBold,
     color: '#2d1515',
     flex: 1,
   },
   alertTimeText: {
-    fontSize: 12,
-    color: '#a81c1c',
+    ...typography.small,
+    color: colors.critical,
     fontWeight: '700',
-    marginTop: 2,
+    marginTop: spacing.xs,
   },
   alertDetailText: {
-    fontSize: 13,
+    ...typography.small,
     color: '#5d5e63',
-    marginTop: 4,
+    marginTop: spacing.xs,
   },
   verButton: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 18,
+    backgroundColor: colors.background,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: br.round,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ffe3e3',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 1,
+    ...shadows.light,
   },
   verButtonText: {
-    color: '#a81c1c',
-    fontSize: 12,
+    ...typography.small,
+    color: colors.critical,
     fontWeight: '600',
-    marginRight: 2,
+    marginRight: spacing.xs,
+  },
+  emptyText: {
+    ...typography.body,
+    color: colors.secondary,
+    textAlign: 'center',
+    marginTop: spacing.xl,
   },
 });

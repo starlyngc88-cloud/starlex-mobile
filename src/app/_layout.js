@@ -1,81 +1,133 @@
+import React from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Tabs } from 'expo-router';
-import { Home, Calendar, Users, DollarSign, Settings } from 'lucide-react-native'; // 👈 'Calendar' siempre debe importarse así en inglés
+import { Home, Calendar, Users, DollarSign, Settings } from 'lucide-react-native';
+import { useAuth } from '../../app/hooks/useAuth';
+import { LoginScreen } from '../../app/components/LoginScreen';
+import { colors, typography, spacing } from '../theme';
 
-export default function Layout() {
+function LoadingScreen() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: '#003dc7', // Azul Starlex
-        tabBarInactiveTintColor: '#71717a',
-        tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: '#e2e8f0',
-          height: 65,
-          paddingBottom: 10,
-          paddingTop: 8,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: '500',
-          textTransform: 'lowercase',
-        },
-        headerShown: false,
-      }}
-    >
-      {/* 1. HOME */}
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Home color={color} size={22} />,
-        }}
-      />
-      
-      {/* 2. CALENDARIO */}
-      <Tabs.Screen
-        name="calendario" // 👈 Tu archivo en español físico
-        options={{
-          title: 'calendario',
-          // 👈 AQUÍ: Aseguramos que use el componente <Calendar /> de Lucide en mayúscula
-          tabBarIcon: ({ color }) => <Calendar color={color} size={22} />, 
-        }}
-      />
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+}
 
-      {/* 3. CLIENTES */}
-      <Tabs.Screen
-        name="clientes" 
-        options={{
-          title: 'clientes',
-          tabBarIcon: ({ color }) => <Users color={color} size={22} />,
-        }}
-      />
+function TricolorLine() {
+  return (
+    <SafeAreaView edges={['top']} style={{ backgroundColor: colors.background }}>
+      <View style={{ flexDirection: 'row', height: 3 }}>
+        <View style={{ flex: 1, backgroundColor: colors.tricolor.yellow }} />
+        <View style={{ flex: 1, backgroundColor: colors.tricolor.blue }} />
+        <View style={{ flex: 1, backgroundColor: colors.tricolor.red }} />
+      </View>
+    </SafeAreaView>
+  );
+}
 
-      {/* 4. FINANZAS */}
-      <Tabs.Screen
-        name="finanzas" 
-        options={{
-          title: 'finanzas',
-          tabBarIcon: ({ color }) => <DollarSign color={color} size={22} />,
-        }}
-      />
+export default function RootLayout() {
+  const { isAuthenticated, loading } = useAuth();
 
-      {/* 5. AJUSTES */}
-      <Tabs.Screen
-        name="ajustes" 
-        options={{
-          title: 'ajustes',
-          tabBarIcon: ({ color }) => <Settings color={color} size={22} />,
-        }}
-      />
+  if (loading) {
+    return (
+      <SafeAreaProvider>
+        <LoadingScreen />
+      </SafeAreaProvider>
+    );
+  }
 
-      {/* RUTA DE ALERTAS OCULTA */}
-      <Tabs.Screen
-        name="alerts"
-        options={{
-          href: null, 
-        }}
-      />
-    </Tabs>
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaProvider>
+        <LoginScreen />
+      </SafeAreaProvider>
+    );
+  }
+
+  return (
+    <SafeAreaProvider>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <TricolorLine />
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: colors.primary,
+            tabBarInactiveTintColor: colors.secondary,
+            tabBarStyle: {
+              backgroundColor: colors.background,
+              borderTopWidth: 1,
+              borderTopColor: colors.border,
+              height: 65,
+              paddingBottom: spacing.sm,
+              paddingTop: spacing.xs,
+            },
+            tabBarLabelStyle: {
+              ...typography.label,
+            },
+            headerShown: false,
+          }}
+        >
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: 'Home',
+              tabBarIcon: ({ color }) => <Home color={color} size={22} />,
+            }}
+          />
+
+          <Tabs.Screen
+            name="calendario"
+            options={{
+              title: 'calendario',
+              tabBarIcon: ({ color }) => <Calendar color={color} size={22} />,
+            }}
+          />
+
+          <Tabs.Screen
+            name="procesados"
+            options={{
+              title: 'procesados',
+              tabBarIcon: ({ color }) => <Users color={color} size={22} />,
+            }}
+          />
+
+          <Tabs.Screen
+            name="finanzas"
+            options={{
+              title: 'finanzas',
+              tabBarIcon: ({ color }) => <DollarSign color={color} size={22} />,
+            }}
+          />
+
+          <Tabs.Screen
+            name="ajustes"
+            options={{
+              title: 'ajustes',
+              tabBarIcon: ({ color }) => <Settings color={color} size={22} />,
+            }}
+          />
+
+        <Tabs.Screen
+          name="alerts"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="nuevo-evento"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="nuevo-procesado"
+          options={{
+            href: null,
+          }}
+        />
+      </Tabs>
+      </View>
+    </SafeAreaProvider>
   );
 }

@@ -1,0 +1,7 @@
+_layout.js — Layout raíz
+=======================
+- Layout raíz con SafeAreaProvider
+- Controla auth: si no autenticado → LoginScreen, si autenticado → Tabs
+- TricolorLine (amarillo, azul, rojo) en parte superior de todas las pantallas autenticadas
+- Bottom tabs: Home, Calendario, Procesados, Finanzas, Ajustes
+- Rutas ocultas: alerts, nuevo-evento

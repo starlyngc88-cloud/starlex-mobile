@@ -1,0 +1,4 @@
+ajustes.js — Pantalla Ajustes
+==============================
+- Pendiente de implementar
+- Ruta configurada en tabs con icono Settings

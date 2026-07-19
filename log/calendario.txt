@@ -1,0 +1,7 @@
+calendario.js — Pantalla Calendario
+=====================================
+- Calendario semanal con selector de días
+- Listado de audiencias pendientes con hora, título, juzgado, radicado
+- Tarjetas de evento con estado (Normal/Crítico)
+- FAB "+" en esquina inferior derecha navega a /nueva-audiencia
+- TricolorLine eliminado (se hereda del layout global)

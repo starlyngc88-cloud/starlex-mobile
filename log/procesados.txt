@@ -1,0 +1,8 @@
+procesados.js — Pantalla Procesados
+=====================================
+- Lista de procesados con búsqueda por nombre o cédula
+- Cada tarjeta: iniciales como avatar, nombre, cédula, badge de estado legal
+- Badge de estado con colores: amarillo (indagación), azul (imputado), rojo (juicio)
+- Estados: loading, error con reintentar, lista vacía
+- FAB "+" en esquina inferior derecha → navega a nuevo-procesado
+- Recarga datos al recibir foco (useFocusEffect) para reflejar nuevos registros

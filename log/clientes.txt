@@ -1,0 +1,4 @@
+clientes.js → RENOMBRADO a procesados.js
+==========================================
+- Archivo renombrado a procesados.js
+- Ver log/procesados.txt

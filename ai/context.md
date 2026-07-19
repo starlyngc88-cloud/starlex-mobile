@@ -1,16 +1,10 @@
 \# Contexto Starlex
 
-
-
 Aplicación móvil para gestión de procesos legales bajo la Ley 906 de 2004 en Colombia.
-
-
 
 Usuarios:
 
 \- Abogados penalistas
-
-
 
 Objetivo:
 
@@ -19,8 +13,6 @@ Objetivo:
 \- Control de audiencias
 
 \- Manejo documental
-
-
 
 Módulos:
 
@@ -33,4 +25,3 @@ Módulos:
 \- Documentos
 
 \- Archivado automático
-
